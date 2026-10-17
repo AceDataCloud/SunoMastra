@@ -57,3 +57,5 @@ const editor = new MastraEditor({ toolProviders: { suno } });
 Studio 没有条目时检查服务器是否注册 provider、Editor 存储和工具编辑权限；401/403 检查应用 Key、过期、服务权限和生成/查询 API 范围；429 遵守限流；pending 继续查原 ID；失败先检查任务记录再决定是否重发。此包提供音乐工具，Agent 使用的推理 LLM 需另行配置。
 
 Mastra 的 npm 集成、官方目录、Connect 和 LLM provider 下拉是不同入口。当前包尚未被 Mastra 官方收录；[models.dev PR](https://github.com/anomalyco/models.dev/pull/8873)负责另一条 LLM 发现路径。
+
+[Mastra 技术收录提案 #27373](https://github.com/mastra-ai/mastra/issues/27373) 已提交，等待维护者反馈；提交提案不等于官方收录。

@@ -1,6 +1,6 @@
 # Proposed community integration: Suno by Ace Data Cloud
 
-Prepared 2026-10-18; not submitted and not officially listed.
+Prepared 2026-10-18; technical contribution request submitted at https://github.com/mastra-ai/mastra/issues/27373. Maintainer feedback and official admission are pending.
 
 ## Integration surface
 
