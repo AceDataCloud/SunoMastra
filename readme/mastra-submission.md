@@ -1,6 +1,6 @@
 # Proposed community integration: Suno by Ace Data Cloud
 
-Prepared 2026-10-18; technical contribution request submitted at https://github.com/mastra-ai/mastra/issues/27373. Maintainer feedback and official admission are pending.
+Prepared 2026-10-18; technical contribution request submitted at https://github.com/mastra-ai/mastra/issues/27373. The maintainer closed this request on 2026-10-18 (Asia/Shanghai), stating that this is not being pursued now. No official admission was granted. Decision: https://github.com/mastra-ai/mastra/issues/27373#issuecomment-6239261501 . Independent ToolProvider distribution remains available.
 
 ## Integration surface
 
@@ -20,7 +20,7 @@ Proposed path, subject to maintainer feedback: `docs/src/content/en/integrations
 
 ## Contribution and admission gates
 
-Mastra's CONTRIBUTING.md requires a linked issue for every PR and maintainer feedback before a new feature PR. No public self-service ToolProvider marketplace uploader or arbitrary Connect admission manifest has been established. Do not invent one or equate npm publication with official listing. Submit a concise technical documentation/integration request under the normal contribution process once the package is publicly released and the Studio entry has been visually checked. Do not submit a competing models.dev provider PR; #8873 has a separate owner.
+Mastra's CONTRIBUTING.md requires a linked issue for every PR and maintainer feedback before a new feature PR. No public self-service ToolProvider marketplace uploader or arbitrary Connect admission manifest has been established. Do not invent one or equate npm publication with official listing. The proposed official guide was declined for now. Do not submit a duplicate request or upstream PR without a new invitation or policy change. Continue independent package distribution and complete real Studio visual verification. Do not submit a competing models.dev provider PR; #8873 has a separate owner.
 
 ## Free verification recipe for the UI owner
 

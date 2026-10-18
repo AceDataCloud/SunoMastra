@@ -6,7 +6,7 @@
 
 ## 1. 安装当前候选包
 
-2026-10-18 状态：源码候选，npm 发布与 Mastra 官方目录收录均待完成。包名为 `@acedatacloud/mastra-suno`，实现正式的 ToolProvider 接口。安装包后还要注册到项目，才能在 Studio 选择工具。
+2026-10-18 状态：源码候选，npm 发布待完成；Mastra 已关闭这项官方集成指南提案，当前不推进该官方入口，独立 ToolProvider 安装仍是可用接入机制。包名为 `@acedatacloud/mastra-suno`，实现正式的 ToolProvider 接口。安装包后还要注册到项目，才能在 Studio 选择工具。
 
 需要 Node 22.13+；先按[英文版安装命令](../README.md#1-install-this-integration)克隆 `codex/native-tool-provider` 分支，运行 `npm ci`、`npm run check`、`npm pack`，再在自己的 Mastra 项目安装生成的 tgz 与 `@mastra/editor@0.16.0`。不要把尚未发布的 npm 名称当成已可一键安装。
 
@@ -58,4 +58,4 @@ Studio 没有条目时检查服务器是否注册 provider、Editor 存储和工
 
 Mastra 的 npm 集成、官方目录、Connect 和 LLM provider 下拉是不同入口。当前包尚未被 Mastra 官方收录；[models.dev PR](https://github.com/anomalyco/models.dev/pull/8873)负责另一条 LLM 发现路径。
 
-[Mastra 技术收录提案 #27373](https://github.com/mastra-ai/mastra/issues/27373) 已提交，等待维护者反馈；提交提案不等于官方收录。
+[Mastra 官方集成指南提案 #27373](https://github.com/mastra-ai/mastra/issues/27373) 已被维护者关闭；[2026-10-18（Asia/Shanghai）维护者回复](https://github.com/mastra-ai/mastra/issues/27373#issuecomment-6239261501)表示目前不推进。此状态不是待审批，不代表禁止独立 ToolProvider；本包仍未获官方目录收录。

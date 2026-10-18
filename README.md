@@ -6,7 +6,7 @@ Use **Suno music generation, lyrics, audio extension, and task queries** in Mast
 
 ## 1. Install this integration
 
-**Status, 2026-10-18:** source candidate; npm release and Mastra official directory admission are pending. The npm name is `@acedatacloud/mastra-suno`. This package implements Mastra's documented [ToolProvider interface](https://mastra.ai/reference/editor/tool-provider); installing it does not add a global Marketplace entry or an LLM provider.
+**Status, 2026-10-18:** source candidate; npm release is pending. Mastra closed the proposed official integration-guide request for now; this is an independent ToolProvider, with no official listing. The npm name is `@acedatacloud/mastra-suno`. This package implements Mastra's documented [ToolProvider interface](https://mastra.ai/reference/editor/tool-provider); installing it does not add a global Marketplace entry or an LLM provider.
 
 To review/install the current candidate with Node 22.13 or newer:
 
@@ -111,4 +111,4 @@ To use an existing local MCP installation instead of the hosted endpoint, pass a
 
 ## Official discovery and contribution
 
-Mastra supports registered ToolProviders, user-configured MCP connections, and a separate managed Connect catalog. This candidate uses the first mechanism. It has **not** been admitted to Mastra Connect or the official integration directory. The [technical contribution request](https://github.com/mastra-ai/mastra/issues/27373) is open; maintainer feedback is pending. See the concrete proposal in [the contribution material](readme/mastra-submission.md). LLM dropdown discovery is a separate [models.dev contribution](https://github.com/anomalyco/models.dev/pull/8873), not a feature of this package.
+Mastra supports registered ToolProviders, user-configured MCP connections, and a separate managed Connect catalog. This candidate uses the first mechanism. It has **not** been admitted to Mastra Connect or the official integration directory. The [official integration-guide request](https://github.com/mastra-ai/mastra/issues/27373) was closed by a maintainer on 2026-10-18 (Asia/Shanghai), stating that this is not being pursued now. Independent ToolProvider installation remains the supported path; this package has no official directory admission. See the [maintainer decision](https://github.com/mastra-ai/mastra/issues/27373#issuecomment-6239261501). See the concrete proposal in [the contribution material](readme/mastra-submission.md). LLM dropdown discovery is a separate [models.dev contribution](https://github.com/anomalyco/models.dev/pull/8873), not a feature of this package.
