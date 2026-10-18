@@ -1,0 +1,67 @@
+{
+  "name": "@acedatacloud/mastra-suno",
+  "version": "0.1.0",
+  "description": "Suno music generation and task-query ToolProvider for Mastra agents and Studio, by Ace Data Cloud.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Ace Data Cloud Dev <dev@acedata.cloud>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AceDataCloud/SunoMastra.git"
+  },
+  "homepage": "https://github.com/AceDataCloud/SunoMastra#readme",
+  "bugs": "https://github.com/AceDataCloud/SunoMastra/issues",
+  "keywords": [
+    "mastra",
+    "suno",
+    "music",
+    "audio",
+    "ai-music",
+    "tool-provider",
+    "mcp",
+    "acedatacloud"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "readme",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "MASTRA_AUTO_REFRESH_PROVIDERS=false node --test test/*.test.mjs",
+    "typecheck:example": "tsc --noEmit --module NodeNext --moduleResolution NodeNext --target ES2022 --strict --skipLibCheck examples/mastra.ts",
+    "check": "npm run build && npm run typecheck:example && npm test",
+    "pack:check": "npm pack --dry-run",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "@mastra/core": ">=1.75.0 <2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1"
+  },
+  "devDependencies": {
+    "@mastra/core": "1.75.0",
+    "@mastra/editor": "0.16.0",
+    "@mastra/mcp": "2.2.0",
+    "@types/node": "22.18.0",
+    "typescript": "5.9.3",
+    "zod": "4.3.6"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
