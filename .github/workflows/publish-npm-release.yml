@@ -1,0 +1,57 @@
+name: Publish verified Mastra release packages to npm
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: choice
+        options: [v0.1.0]
+        default: v0.1.0
+        required: true
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Download and verify immutable public release assets
+        run: |
+          test "$RELEASE_TAG" = v0.1.0
+          for ENTRY in SunoMastra:suno SeedanceMastra:seedance HappyHorseMastra:happyhorse GPTImageMastra:gpt-image NanoBananaMastra:nano-banana; do
+            REPO="${ENTRY%%:*}"
+            SUFFIX="${ENTRY#*:}"
+            mkdir "$SUFFIX"
+            BASE="https://github.com/AceDataCloud/$REPO/releases/download/$RELEASE_TAG"
+            curl --fail --location "$BASE/acedatacloud-mastra-$SUFFIX-0.1.0.tgz" --output "$SUFFIX/acedatacloud-mastra-$SUFFIX-0.1.0.tgz"
+            curl --fail --location "$BASE/SHA256SUMS.txt" --output "$SUFFIX/SHA256SUMS.txt"
+            (cd "$SUFFIX" && sha256sum --check SHA256SUMS.txt)
+          done
+      - name: Publish with existing identity and verify public integrity
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.MASTRA_RELEASE_NPM_TOKEN }}
+        run: |
+          test -n "$NODE_AUTH_TOKEN"
+          IDENTITY="$(npm whoami --registry=https://registry.npmjs.org)"
+          test "$IDENTITY" = germey
+          echo "Existing npm identity verified: $IDENTITY"
+          for SUFFIX in suno seedance happyhorse gpt-image nano-banana; do
+            FILE="$SUFFIX/acedatacloud-mastra-$SUFFIX-0.1.0.tgz"
+            NAME="@acedatacloud/mastra-$SUFFIX"
+            tar -xOf "$FILE" package/package.json > package-metadata.json
+            PACKAGE_NAME="$NAME" node -e 'const p=require("./package-metadata.json");if(p.name!==process.env.PACKAGE_NAME||p.version!=="0.1.0") process.exit(1)'
+            if npm view "$NAME@0.1.0" dist.integrity --json --registry=https://registry.npmjs.org > existing-integrity.json 2> existing-error.txt; then
+              PACKAGE_FILE="$FILE" node -e 'const fs=require("fs"),c=require("crypto");const expected="sha512-"+c.createHash("sha512").update(fs.readFileSync(process.env.PACKAGE_FILE)).digest("base64");if(JSON.parse(fs.readFileSync("existing-integrity.json"))!==expected)process.exit(1)'
+              echo "$NAME@0.1.0 already exists with matching integrity"
+            else
+              if ! grep -q E404 existing-error.txt; then cat existing-error.txt; exit 1; fi
+              npm publish "$FILE" --ignore-scripts --access public --tag latest --registry=https://registry.npmjs.org
+            fi
+            npm view "$NAME@0.1.0" dist.integrity --json --registry=https://registry.npmjs.org > published-integrity.json
+            PACKAGE_FILE="$FILE" node -e 'const fs=require("fs"),c=require("crypto");const expected="sha512-"+c.createHash("sha512").update(fs.readFileSync(process.env.PACKAGE_FILE)).digest("base64");if(JSON.parse(fs.readFileSync("published-integrity.json"))!==expected)process.exit(1)'
+            echo "$NAME@0.1.0 public npm integrity verified"
+          done
