@@ -4,11 +4,17 @@
 
 [English](../README.md) · [获取应用 API Key](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=sunomastra_readme_api_key) · [当前服务权限与价格](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=sunomastra_readme_pricing)
 
-## 1. 安装当前候选包
+## 1. 安装版本化集成包
 
-2026-10-18 状态：源码候选，npm 发布待完成；Mastra 已关闭这项官方集成指南提案，当前不推进该官方入口，独立 ToolProvider 安装仍是可用接入机制。包名为 `@acedatacloud/mastra-suno`，实现正式的 ToolProvider 接口。安装包后还要注册到项目，才能在 Studio 选择工具。
+这是独立社区集成 **0.1.0**，版本化安装包位于 [GitHub Release](https://github.com/AceDataCloud/SunoMastra/releases/tag/v0.1.0)，包名为 `@acedatacloud/mastra-suno`。npm 登记是独立分发渠道；Mastra 官方指南提案已关闭，本包没有官方目录条目。
 
-需要 Node 22.13+；先按[英文版安装命令](../README.md#1-install-this-integration)克隆 `codex/native-tool-provider` 分支，运行 `npm ci`、`npm run check`、`npm pack`，再在自己的 Mastra 项目安装生成的 tgz 与 `@mastra/editor@0.16.0`。不要把尚未发布的 npm 名称当成已可一键安装。
+需要 Node 22.13+，在现有 Mastra 项目安装：
+
+```bash
+npm install https://github.com/AceDataCloud/SunoMastra/releases/download/v0.1.0/acedatacloud-mastra-suno-0.1.0.tgz @mastra/editor@0.16.0
+```
+
+发布包包含编译后的 JavaScript 和类型声明。手动下载时可按发布页 `SHA256SUMS.txt` 校验；随后按下文注册到服务器，才能在项目的 Studio 里选择工具。
 
 ## 2. 注册并获取应用密钥
 
