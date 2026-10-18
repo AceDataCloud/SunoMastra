@@ -1,0 +1,73 @@
+name: Verify public release installation
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing public release tag shared by the five service packages
+        required: true
+        default: v0.1.0
+permissions:
+  contents: read
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - repo: SunoMastra
+            suffix: suno
+            export: SunoToolProvider
+          - repo: SeedanceMastra
+            suffix: seedance
+            export: SeedanceToolProvider
+          - repo: HappyHorseMastra
+            suffix: happyhorse
+            export: HappyHorseToolProvider
+          - repo: GPTImageMastra
+            suffix: gpt-image
+            export: GPTImageToolProvider
+          - repo: NanoBananaMastra
+            suffix: nano-banana
+            export: NanoBananaToolProvider
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+      RELEASE_REPO: ${{ matrix.repo }}
+      PACKAGE_SUFFIX: ${{ matrix.suffix }}
+      PROVIDER_EXPORT: ${{ matrix.export }}
+      MASTRA_AUTO_REFRESH_PROVIDERS: 'false'
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Download and verify public artifact
+        run: |
+          node -e 'if (!/^v\d+\.\d+\.\d+$/.test(process.env.RELEASE_TAG)) process.exit(1)'
+          VERSION="${RELEASE_TAG#v}"
+          FILE="acedatacloud-mastra-${PACKAGE_SUFFIX}-${VERSION}.tgz"
+          RELEASE_URL="https://github.com/AceDataCloud/${RELEASE_REPO}/releases/download/${RELEASE_TAG}"
+          curl --fail --location --retry 2 "$RELEASE_URL/$FILE" --output "$FILE"
+          curl --fail --location --retry 2 "$RELEASE_URL/SHA256SUMS.txt" --output SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - name: Install directly from the public release URL
+        run: |
+          node -e 'require("fs").writeFileSync("package.json", JSON.stringify({name:"mastra-release-install-check",private:true,type:"module"}))'
+          VERSION="${RELEASE_TAG#v}"
+          npm install --ignore-scripts "https://github.com/AceDataCloud/${RELEASE_REPO}/releases/download/${RELEASE_TAG}/acedatacloud-mastra-${PACKAGE_SUFFIX}-${VERSION}.tgz" @mastra/core@1.75.0 @mastra/editor@0.16.0 @mastra/mcp@2.2.0 zod@4.3.6
+      - name: Register the installed provider in real Mastra Editor
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { MastraEditor } from '@mastra/editor';
+          const mod = await import(`@acedatacloud/mastra-${process.env.PACKAGE_SUFFIX}`);
+          const provider = new mod[process.env.PROVIDER_EXPORT]({ apiKey: 'release-fixture-not-a-key' });
+          try {
+            const editor = new MastraEditor({ toolProviders: { [provider.info.id]: provider } });
+            assert.equal(editor.getToolProviders()[provider.info.id], provider);
+            assert.match(provider.info.name, /by Ace Data Cloud/);
+            assert.doesNotMatch(JSON.stringify(provider), /release-fixture-not-a-key/);
+            assert.equal((await provider.listToolkits()).data.length, 1);
+            console.log(`${provider.info.name}: public installation and Mastra Editor registration passed; no API calls`);
+          } finally {
+            await provider.disconnect();
+          }
+          JS
